@@ -6,6 +6,8 @@ from pprint import pprint
 from django.views.generic import ListView, DetailView
 from .models import Product
 from .filters import ProductFilter
+from .forms import ProductForm
+from django.http import HttpResponseRedirect
 
 class ProductsList(ListView):
     # Указываем модель, объекты которой мы будем выводить
@@ -67,4 +69,16 @@ class ProductDetail(DetailView):
     context_object_name = 'product'
     #
     pk_url_kwarg = 'quantity'
+
+
+def create_product(request):
+    form = ProductForm()
+    if request.method == 'POST':
+        form = ProductForm(request.POST)
+        if form.is_valid():
+            form.save()
+            return HttpResponseRedirect('/products')
+
+
+    return render(request, 'product_edit.html', {'form':form})
 
