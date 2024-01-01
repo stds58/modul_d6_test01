@@ -1,6 +1,8 @@
-
-
 {% extends 'flatpages/default.html' %}
+
+{% load custom_filters %}
+<!-- Подключаем новый файл с нашим тегом -->
+{% load custom_tags %}
 
 {% block title %}
 Products
@@ -8,6 +10,28 @@ Products
 
 {% block content %}
    <h1>Все товары</h1>
+   <!-- Используем переданную из представления переменную time_now
+   и применяем к ней фильтр date. По назначению этот фильтр очень похож
+   на метод strftime у объекта datetime в Python — вывод времени
+   в указанном формате. -->
+   <h3>{{ time_now|date:'d.m.Y H:i' }}</h3>
+   <h3>{{ time_now }}</h3>
+   <!-- Вот так выглядело использование переменной и фильтра -->
+   <!-- <h3>{{ time_now|date:'M d Y' }}</h3> -->
+   <!-- А вот так мы используем наш тег-->
+   <h3>{% current_time '%d.%m.%Y' %}</h3>
+   <!-- Если в переменной next_sale будет None,
+   то выведется указанный в фильтре текст -->
+   <h3> {{ next_sale|default_if_none:"Чуть позже сообщим о распродаже!" }} </h3>
+
+ {# Добавляем форму, которая объединяет набор полей, которые будут отправляться в запросе #}
+   <form action="" method="get">
+       {# Переменная, которую мы передали через контекст, может сгенерировать нам форму с полями #}
+       {{ filterset.form.as_p }}
+       {# Добавим кнопку отправки данных формы #}
+       <input type="submit" value="Найти" />
+   </form>
+
    <hr>
    {% if products %}
        <table>
@@ -26,15 +50,16 @@ Products
            product — переменная цикла, т.е. наш товар полученный из списка -->
            {% for product in products %}
            <tr>
-               <!-- Не забываем, что переменные в шаблоне ничем не отличаются
-
+               <!-- Не забываем, что переменные в шаблоне ничем не отличаютс
                 от переменных в Python. Здесь также можно получать доступ к
                 полям объекта модели. Например, здесь мы выводим имя,
                 в следующем столбце описание, и т.д.  -->
                <td>{{ product.name }}</td>
                <td>{{ product.description|truncatechars:15 }}</td>
                <td>{{ product.category.name }}</td>
-               <td>{{ product.price }}</td>
+               <!-- Используем наш фильтр -->
+               <td>{{ product.price|currency:"usd" }}</td>
+               <!-- <td>{{ product.price }}</td> -->
                <td>{{ product.quantity }}</td>
            </tr>
            {% endfor %}
@@ -44,5 +69,33 @@ Products
        <h2>Товаров нет!</h2>
 
    {% endif %}
-{% endblock content %}
 
+{# Добавляем пагинацию на страницу #}
+
+   {# Информация о предыдущих страницах #}
+   {% if page_obj.has_previous %}
+      {#  <a href="?page=1">1</a> #}
+       {# Для каждой ссылки пагинации указываем обработку через новый тег #}
+       <a href="?{% url_replace page=1 %}">1</a>
+       {% if page_obj.previous_page_number != 1 %}
+           ...
+           {#  <a href="?page={{ page_obj.previous_page_number }}">{{ page_obj.previous_page_number }}</a>#}
+           <a href="?{% url_replace page=page_obj.previous_page_number %}">{{ page_obj.previous_page_number }}</a>
+       {% endif %}
+   {% endif %}
+
+   {# Информация о текущей странице #}
+   {{ page_obj.number }}
+
+   {# Информация о следующих страницах #}
+   {% if page_obj.has_next %}
+      {#  <a href="?page={{ page_obj.next_page_number }}">{{ page_obj.next_page_number }}</a> #}
+       <a href="?{% url_replace page=page_obj.next_page_number %}">{{ page_obj.next_page_number }}</a>
+       {% if paginator.num_pages != page_obj.next_page_number %}
+           ...
+           {# <a href="?page={{ page_obj.paginator.num_pages }}">{{ page_obj.paginator.num_pages }}</a> #}
+           <a href="?{% url_replace page=page_obj.paginator.num_pages %}">{{ page_obj.paginator.num_pages }}</a>
+       {% endif %}
+   {% endif %}
+
+{% endblock content %}
