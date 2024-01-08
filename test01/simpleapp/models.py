@@ -2,16 +2,16 @@ from django.db import models
 from django.core.validators import MinValueValidator
 from django.urls import reverse
 from django.contrib.auth.models import User
-
+from django.shortcuts import render
 
 class Author(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE)
     def polz(request):
         current_user = request.user
         if current_user.is_authenticated:
-            'default.html'
+            return render(request, 'default.html')
         else:
-            'default.html'
+            return render(request, 'default.html')
 
 
 # Товар для нашей витрины
