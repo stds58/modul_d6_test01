@@ -36,6 +36,7 @@ Products
    {% if products %}
        <table class="table-bordered">
            <tr>
+               <td>id</td>
                <td>Название</td>
                <td>Описание</td>
                <td>Категория</td>
@@ -54,6 +55,7 @@ Products
                 от переменных в Python. Здесь также можно получать доступ к
                 полям объекта модели. Например, здесь мы выводим имя,
                 в следующем столбце описание, и т.д.  -->
+               <td width="20%">{{ product.id }}</td>
                <td width="20%">{{ product.name }}</td>
                <td width="40%">{{ product.description|truncatechars:15 }}</td>
                <td width="10%">{{ product.category.name }}</td>
