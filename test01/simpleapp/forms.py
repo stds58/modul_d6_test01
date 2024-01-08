@@ -24,5 +24,3 @@ class ProductForm(forms.ModelForm):
 
         return cleaned_data
 
-#f = ProductForm({'name': '12345678901234567890', 'category': 1, 'price': 42, 'description': '12345678901234567890', 'quantity': 1})
-#f.errors

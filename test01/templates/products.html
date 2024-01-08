@@ -34,7 +34,7 @@ Products
 
    <hr>
    {% if products %}
-       <table>
+       <table class="table-bordered">
            <tr>
                <td>Название</td>
                <td>Описание</td>
@@ -49,18 +49,18 @@ Products
            При этом сам цикл работает точно так же, как и в Python.
            product — переменная цикла, т.е. наш товар полученный из списка -->
            {% for product in products %}
-           <tr>
+           <tr align="left">
                <!-- Не забываем, что переменные в шаблоне ничем не отличаютс
                 от переменных в Python. Здесь также можно получать доступ к
                 полям объекта модели. Например, здесь мы выводим имя,
                 в следующем столбце описание, и т.д.  -->
-               <td>{{ product.name }}</td>
-               <td>{{ product.description|truncatechars:15 }}</td>
-               <td>{{ product.category.name }}</td>
+               <td width="20%">{{ product.name }}</td>
+               <td width="40%">{{ product.description|truncatechars:15 }}</td>
+               <td width="10%">{{ product.category.name }}</td>
                <!-- Используем наш фильтр -->
-               <td>{{ product.price|currency:"usd" }}</td>
+               <td width="10%">{{ product.price|currency:"usd" }}</td>
                <!-- <td>{{ product.price }}</td> -->
-               <td>{{ product.quantity }}</td>
+               <td width="10%">{{ product.quantity }}</td>
            </tr>
            {% endfor %}
 

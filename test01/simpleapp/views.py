@@ -3,13 +3,35 @@ from datetime import datetime
 from pprint import pprint
 # Импортируем класс, который говорит нам о том,
 # что в этом представлении мы будем выводить список объектов из БД
-from django.views.generic import ListView, DetailView
+from django.views.generic import (
+    ListView, DetailView, CreateView, UpdateView, DeleteView, TemplateView
+)
 from .models import Product
 from .filters import ProductFilter
 from .forms import ProductForm
 from django.http import HttpResponseRedirect
+from django.urls import reverse_lazy
+from django.contrib.auth.mixins import LoginRequiredMixin
+from django.contrib.auth.decorators import login_required
+from django.utils.decorators import method_decorator
+import django.contrib.auth
 
-class ProductsList(ListView):
+
+current_user = request.user
+if current_user.is_authenticated:
+    x=1
+else:
+    x=0
+
+class ProtectedView(LoginRequiredMixin, TemplateView):
+    template_name = 'protected_page.html'
+
+# @method_decorator(login_required, name='dispatch')
+# class ProtectedView(TemplateView):
+#     template_name = 'protected_page.html'
+
+@method_decorator(login_required(login_url = '/about/'), name='dispatch')
+class ProductsList(ListView, TemplateView):
     # Указываем модель, объекты которой мы будем выводить
     model = Product
     # Поле, которое будет использоваться для сортировки объектов
@@ -68,7 +90,31 @@ class ProductDetail(DetailView):
     # Название объекта, в котором будет выбранный пользователем продукт
     context_object_name = 'product'
     #
-    pk_url_kwarg = 'quantity'
+    #pk_url_kwarg = 'pk'
+
+
+# Добавляем новое представление для создания товаров.
+class ProductCreate(CreateView):
+    # Указываем нашу разработанную форму
+    form_class = ProductForm
+    # модель товаров
+    model = Product
+    # и новый шаблон, в котором используется форма.
+    template_name = 'product_edit.html'
+
+
+# Добавляем представление для изменения товара.
+class ProductUpdate(UpdateView):
+    form_class = ProductForm
+    model = Product
+    template_name = 'product_edit.html'
+
+
+# Представление удаляющее товар.
+class ProductDelete(DeleteView):
+    model = Product
+    template_name = 'product_delete.html'
+    success_url = reverse_lazy('product_list')
 
 
 def create_product(request):
