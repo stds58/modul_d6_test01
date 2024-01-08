@@ -9,7 +9,7 @@ from django.views.generic import (
 from .models import Product
 from .filters import ProductFilter
 from .forms import ProductForm
-from django.http import HttpResponseRedirect
+from django.http import HttpResponseRedirect, HttpRequest
 from django.urls import reverse_lazy
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib.auth.decorators import login_required
@@ -17,21 +17,24 @@ from django.utils.decorators import method_decorator
 import django.contrib.auth
 
 
-current_user = request.user
-if current_user.is_authenticated:
-    x=1
-else:
-    x=0
+# current_user = request.user
+# if current_user.is_authenticated:
+#     x=1
+# else:
+#     x=0
 
-class ProtectedView(LoginRequiredMixin, TemplateView):
-    template_name = 'protected_page.html'
 
 # @method_decorator(login_required, name='dispatch')
 # class ProtectedView(TemplateView):
 #     template_name = 'protected_page.html'
 
-@method_decorator(login_required(login_url = '/about/'), name='dispatch')
-class ProductsList(ListView, TemplateView):
+#@method_decorator(login_required(login_url = '/about/'), name='dispatch')
+class ProductsList(ListView, TemplateView, LoginRequiredMixin):
+    current_user = HttpRequest.request.user
+    if current_user.is_authenticated:
+        x=1
+    else:
+        x=0
     # Указываем модель, объекты которой мы будем выводить
     model = Product
     # Поле, которое будет использоваться для сортировки объектов
@@ -82,7 +85,7 @@ class ProductsList(ListView, TemplateView):
         return context
 
 
-class ProductDetail(DetailView):
+class ProductDetail(DetailView, TemplateView, LoginRequiredMixin):
     # Модель всё та же, но мы хотим получать информацию по отдельному товару
     model = Product
     # Используем другой шаблон — product.html

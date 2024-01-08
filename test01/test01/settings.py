@@ -139,4 +139,4 @@ STATICFILES_DIRS = [
     BASE_DIR / "static"
 ]
 
-#LOGIN_URL = 'create/'
+#LOGIN_URL = '/about/'
