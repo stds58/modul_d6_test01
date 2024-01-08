@@ -16,7 +16,8 @@ from django.contrib.auth.decorators import login_required
 from django.utils.decorators import method_decorator
 
 
-@method_decorator(login_required(login_url = '/about/'), name='dispatch')
+@method_decorator(login_required, name='dispatch')
+#@method_decorator(login_required(login_url = '/about/'), name='dispatch')
 class ProductsList(ListView):
     # Указываем модель, объекты которой мы будем выводить
     model = Product

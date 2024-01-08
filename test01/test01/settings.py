@@ -33,19 +33,23 @@ ALLOWED_HOSTS = ['127.0.0.1']
 
 INSTALLED_APPS = [
     'django.contrib.admin',
-    'django.contrib.auth',
+    'django.contrib.auth',  #для allauth
     'django.contrib.contenttypes',
     'django.contrib.sessions',
-    'django.contrib.messages',
+    'django.contrib.messages',  #для allauth
     'django.contrib.staticfiles',
 
-    'django.contrib.sites',
+    'django.contrib.sites',  #для allauth
     'django.contrib.flatpages',
     'fpages',
     'simpleapp',
     'django_filters',
     'sign',
     'protect',
+    'allauth',  #для allauth
+    'allauth.account',  #для allauth
+    'allauth.socialaccount',  #для allauth
+    'allauth.socialaccount.providers.google',  #для allauth
 
 ]
 
@@ -67,13 +71,14 @@ ROOT_URLCONF = 'test01.urls'
 
 TEMPLATES = [
     {
-        'BACKEND': 'django.template.backends.django.DjangoTemplates',
+        'BACKEND': 'django.template.backends.django.DjangoTemplates',  #для allauth
         'DIRS': [os.path.join(BASE_DIR) , 'templates'],
-        'APP_DIRS': True,
+        #'DIRS': [],  #для allauth
+        'APP_DIRS': True,  #для allauth
         'OPTIONS': {
             'context_processors': [
                 'django.template.context_processors.debug',
-                'django.template.context_processors.request',
+                'django.template.context_processors.request',  #для allauth
                 'django.contrib.auth.context_processors.auth',
                 'django.contrib.messages.context_processors.messages',
             ],
@@ -113,6 +118,13 @@ AUTH_PASSWORD_VALIDATORS = [
     },
 ]
 
+AUTHENTICATION_BACKENDS = [
+    # Needed to login by username in Django admin, regardless of `allauth`
+    'django.contrib.auth.backends.ModelBackend',
+
+    # `allauth` specific authentication methods, such as login by e-mail
+    'allauth.account.auth_backends.AuthenticationBackend',
+]
 
 # Internationalization
 # https://docs.djangoproject.com/en/4.2/topics/i18n/
@@ -141,6 +153,6 @@ STATICFILES_DIRS = [
     BASE_DIR / "static"
 ]
 
-LOGIN_URL = 'sign/login/'
-
+#LOGIN_URL = 'sign/login/'
+LOGIN_URL = '/accounts/login/'
 LOGIN_REDIRECT_URL = '/'

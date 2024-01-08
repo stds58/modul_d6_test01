@@ -1,7 +1,7 @@
-from django.urls import path, include
+from django.urls import path
 # Импортируем созданное нами представление
 from .views import ProductsList, ProductDetail, ProductCreate, ProductUpdate, ProductDelete, create_product
-from django.contrib import admin
+
 
 urlpatterns = [
    # path — означает путь.
@@ -19,8 +19,5 @@ urlpatterns = [
    path('create/', ProductCreate.as_view(), name='product_create'),
    path('<int:pk>/update/', ProductUpdate.as_view(), name='product_update'),
    path('<int:pk>/delete/', ProductDelete.as_view(), name='product_delete'),
-   #path('admin/', admin.site.urls),
-   path('', include('protect.urls')),
-   path('sign/', include('sign.urls')),
 
 ]
