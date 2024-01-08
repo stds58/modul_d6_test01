@@ -16,10 +16,6 @@ from django.contrib.auth.decorators import login_required
 from django.utils.decorators import method_decorator
 
 
-# @method_decorator(login_required, name='dispatch')
-# class ProtectedView(TemplateView):
-#     template_name = 'protected_page.html'
-
 @method_decorator(login_required(login_url = '/about/'), name='dispatch')
 class ProductsList(ListView):
     # Указываем модель, объекты которой мы будем выводить
@@ -72,7 +68,7 @@ class ProductsList(ListView):
         return context
 
 
-class ProductDetail(DetailView, TemplateView, LoginRequiredMixin):
+class ProductDetail(LoginRequiredMixin, DetailView):
     # Модель всё та же, но мы хотим получать информацию по отдельному товару
     model = Product
     # Используем другой шаблон — product.html

@@ -26,7 +26,7 @@ SECRET_KEY = 'django-insecure-kxt=hiil)+uk8j-w(9oku$hnu-g9x)k++5lq#*5l42d+df8(^+
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['127.0.0.1']
 
 
 # Application definition
@@ -44,6 +44,8 @@ INSTALLED_APPS = [
     'fpages',
     'simpleapp',
     'django_filters',
+    'sign',
+    'protect',
 
 ]
 
@@ -139,4 +141,6 @@ STATICFILES_DIRS = [
     BASE_DIR / "static"
 ]
 
-#LOGIN_URL = '/about/'
+LOGIN_URL = 'sign/login/'
+
+LOGIN_REDIRECT_URL = '/'
