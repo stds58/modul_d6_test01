@@ -20,8 +20,7 @@ from django.utils.decorators import method_decorator
 # class ProtectedView(TemplateView):
 #     template_name = 'protected_page.html'
 
-#@method_decorator(login_required(login_url = '/about/'), name='dispatch')
-#, TemplateView, LoginRequiredMixin
+@method_decorator(login_required(login_url = '/about/'), name='dispatch')
 class ProductsList(ListView):
     # Указываем модель, объекты которой мы будем выводить
     model = Product

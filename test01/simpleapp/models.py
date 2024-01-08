@@ -9,9 +9,9 @@ class Author(models.Model):
     def polz(request):
         current_user = request.user
         if current_user.is_authenticated:
-            return render(request, 'default.html')
+            return render(request, 'about.html')
         else:
-            return render(request, 'default.html')
+            return render(request, 'about.html')
 
 
 # Товар для нашей витрины
