@@ -166,3 +166,4 @@ class AppointmentView(View):
         return redirect('appointments:make_appointment')
 
 
+#https://github.com/Tpe3B/NewsPaper/blob/master/NewsPaper/NewsPaper/urls.py
