@@ -1,4 +1,4 @@
-from django.shortcuts import render
+from django.shortcuts import render, reverse, redirect
 from datetime import datetime
 from pprint import pprint
 # Импортируем класс, который говорит нам о том,
@@ -6,7 +6,8 @@ from pprint import pprint
 from django.views.generic import (
     ListView, DetailView, CreateView, UpdateView, DeleteView, TemplateView
 )
-from .models import Product
+from django.views.generic.edit import CreateView
+from .models import Product, Appointment
 from .filters import ProductFilter
 from .forms import ProductForm
 from django.http import HttpResponseRedirect
@@ -14,6 +15,11 @@ from django.urls import reverse_lazy
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib.auth.decorators import login_required
 from django.utils.decorators import method_decorator
+from django.contrib.auth.mixins import PermissionRequiredMixin
+from django.views import View
+from django.core.mail import send_mail
+from django.core.mail import EmailMultiAlternatives  # импортируем класс для создание объекта письма с html
+from django.template.loader import render_to_string  # импортируем функцию, которая срендерит наш html в текст
 
 
 @method_decorator(login_required, name='dispatch')
@@ -81,7 +87,9 @@ class ProductDetail(LoginRequiredMixin, DetailView):
 
 
 # Добавляем новое представление для создания товаров.
-class ProductCreate(CreateView):
+class ProductCreate(PermissionRequiredMixin, CreateView):
+    permission_required = ('simpleapp.add_product',)
+    # а дальше пишите код вашего представления
     # Указываем нашу разработанную форму
     form_class = ProductForm
     # модель товаров
@@ -114,4 +122,47 @@ def create_product(request):
 
 
     return render(request, 'product_edit.html', {'form':form})
+
+
+class AppointmentView(View):
+    def get(self, request, *args, **kwargs):
+        return render(request, 'make_appointment.html', {})
+
+    def post(self, request, *args, **kwargs):
+        appointment = Appointment(
+            date=datetime.strptime(request.POST['date'], '%Y-%m-%d'),
+            client_name=request.POST['client_name'],
+            message=request.POST['message'],
+        )
+        appointment.save()
+
+        # отправляем письмо
+        # send_mail(
+        #     subject=f'{appointment.client_name} {appointment.date.strftime("%Y-%M-%d")}',
+        #     # имя клиента и дата записи будут в теме для удобства
+        #     message=appointment.message,  # сообщение с кратким описанием проблемы
+        #     from_email='peterbadson@yandex.ru',  # здесь указываете почту, с которой будете отправлять (об этом попозже)
+        #     recipient_list=[]  # здесь список получателей. Например, секретарь, сам врач и т. д.
+        # )
+
+        # получаем наш html
+        html_content = render_to_string(
+            'appointment_created.html',
+            {
+                'appointment': appointment,
+            }
+        )
+
+        # в конструкторе уже знакомые нам параметры, да? Называются правда немного по-другому, но суть та же.
+        msg = EmailMultiAlternatives(
+            subject=f'{appointment.client_name} {appointment.date.strftime("%Y-%M-%d")}',
+            body=appointment.message,  # это то же, что и message
+            from_email='stds58@yandex.ru',
+            to=['stds58@gmail.com'],  # это то же, что и recipients_list
+        )
+        msg.attach_alternative(html_content, "text/html")  # добавляем html
+        msg.send()  # отсылаем
+
+        return redirect('appointments:make_appointment')
+
 
