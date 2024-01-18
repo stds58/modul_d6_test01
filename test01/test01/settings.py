@@ -52,9 +52,11 @@ INSTALLED_APPS = [
     'allauth.account',  #для allauth
     'allauth.socialaccount',  #для allauth
     'allauth.socialaccount.providers.google',  #для allauth
+    'appointments',
 
 ]
 
+DEFAULT_FROM_EMAIL = 'stds58@yandex.ru'  # здесь указываем уже свою ПОЛНУЮ почту, с которой будут отправляться письма
 SITE_ID = 1
 
 MIDDLEWARE = [
@@ -174,6 +176,7 @@ EMAIL_HOST_USER = os.getenv("EMAIL_HOST_USER")  # ваше имя пользов
 EMAIL_HOST_PASSWORD = os.getenv("EMAIL_HOST_PASSWORD")  # пароль от почты
 EMAIL_USE_SSL = True  # Яндекс использует ssl, подробнее о том, что это, почитайте в дополнительных источниках, но включать его здесь обязательно
 
+DEFAULT_FROM_EMAIL = EMAIL_HOST_USER + '@yandex.ru'# если вы используете Яндекс, то не забудьте добавить + ‘@yandex.ru’
 
 
 
