@@ -3,7 +3,7 @@ from django.dispatch import receiver  # импортируем нужный де
 from django.core.mail import mail_managers
 from .models import Appointment
 
-
+#
 # в декоратор передаётся первым аргументом сигнал, на который будет реагировать эта функция, и в отправители надо передать также модель
 @receiver(post_save, sender=Appointment)
 def notify_managers_appointment(sender, instance, created, **kwargs):
