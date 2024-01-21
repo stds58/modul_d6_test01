@@ -41,6 +41,7 @@ INSTALLED_APPS = [
     'django.contrib.messages',  #для allauth
     'django.contrib.staticfiles',
 
+    #'appointments',
     'appointments.apps.AppointmentsConfig',
     'django.contrib.sites',  #для allauth
     'django.contrib.flatpages',
@@ -53,7 +54,7 @@ INSTALLED_APPS = [
     'allauth.account',  #для allauth
     'allauth.socialaccount',  #для allauth
     'allauth.socialaccount.providers.google',  #для allauth
-    #'appointments',
+
 
 
 ]
@@ -163,7 +164,6 @@ STATICFILES_DIRS = [
 LOGIN_URL = '/accounts/login/'
 LOGIN_REDIRECT_URL = '/'
 
-MANAGERS = [("n1", "stds58@gmail.com")]
 
 ACCOUNT_EMAIL_REQUIRED = True
 ACCOUNT_UNIQUE_EMAIL = True
@@ -181,6 +181,9 @@ EMAIL_HOST_PASSWORD = os.getenv("EMAIL_HOST_PASSWORD")  # пароль от по
 EMAIL_USE_SSL = True  # Яндекс использует ssl, подробнее о том, что это, почитайте в дополнительных источниках, но включать его здесь обязательно
 
 DEFAULT_FROM_EMAIL = EMAIL_HOST_USER + '@yandex.ru'# если вы используете Яндекс, то не забудьте добавить + ‘@yandex.ru’
+MANAGERS = [("n1", "stds58@gmail.com")]
+ADMINS = [("n2", "stds58@yandex.ru")]
+
 
 
 
