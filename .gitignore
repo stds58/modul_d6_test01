@@ -1,6 +1,4 @@
-/test01/.env
-/venv/
-test01/.env
+
 .env
 .idea/
 **/.idea
