@@ -41,6 +41,7 @@ INSTALLED_APPS = [
     'django.contrib.messages',  #для allauth
     'django.contrib.staticfiles',
 
+    'appointments.apps.AppointmentsConfig',
     'django.contrib.sites',  #для allauth
     'django.contrib.flatpages',
     'fpages',
@@ -52,7 +53,8 @@ INSTALLED_APPS = [
     'allauth.account',  #для allauth
     'allauth.socialaccount',  #для allauth
     'allauth.socialaccount.providers.google',  #для allauth
-    'appointments',
+    #'appointments',
+
 
 ]
 
@@ -161,12 +163,14 @@ STATICFILES_DIRS = [
 LOGIN_URL = '/accounts/login/'
 LOGIN_REDIRECT_URL = '/'
 
+MANAGERS = [("n1", "stds58@gmail.com")]
 
 ACCOUNT_EMAIL_REQUIRED = True
 ACCOUNT_UNIQUE_EMAIL = True
 ACCOUNT_USERNAME_REQUIRED = False
 ACCOUNT_AUTHENTICATION_METHOD = 'email'
-ACCOUNT_EMAIL_VERIFICATION = 'none'
+#ACCOUNT_EMAIL_VERIFICATION = 'none'
+ACCOUNT_EMAIL_VERIFICATION = 'mandatory'
 ACCOUNT_FORMS = {'signup': 'sign.models.BasicSignupForm'}
 
 
