@@ -5,7 +5,7 @@ from datetime import datetime
 from django.core.mail import EmailMultiAlternatives  # импортируем класс для создание объекта письма с html
 from django.template.loader import render_to_string  # импортируем функцию, которая срендерит наш html в текст
 from .models import Appointment
-
+from django.conf import settings
 
 class AppointmentView(View):
     def get(self, request, *args, **kwargs):
@@ -39,8 +39,8 @@ class AppointmentView(View):
         msg = EmailMultiAlternatives(
             subject=f'{appointment.client_name} {appointment.date.strftime("%Y-%M-%d")}',
             body=appointment.message,  # это то же, что и message
-            from_email='stds58@yandex.ru',
-            to=['stds58@gmail.com'],  # это то же, что и recipients_list
+            from_email = settings.DEFAULT_FROM_EMAIL,
+            to=[request.user.email],  # это то же, что и recipients_list
         )
         msg.attach_alternative(html_content, "text/html")  # добавляем html
         msg.send()  # отсылаем
